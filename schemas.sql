@@ -22,17 +22,17 @@ FOREIGN KEY (gene_symbol) REFERENCES Gene(gene_symbol)
 );
 
 
-CREATE TABLE Domaine(
-    domaine_name VARCHAR(50) PRIMARY KEY,
+CREATE TABLE Domain(
+    domain_name VARCHAR(50) PRIMARY KEY,
     family VARCHAR(50),
     domain_description VARCHAR(200)
 );
 
 CREATE TABLE ProteinContainsDomain(
 accession_number VARCHAR(50),
-domaine_name VARCHAR(50),
-PRIMARY KEY (accession_number, domaine_name),
+domain_name VARCHAR(50),
+PRIMARY KEY (accession_number, domain_name),
 FOREIGN KEY (accession_number) REFERENCES Protein(accession_number),
-FOREIGN KEY (domaine_name) REFERENCES Domaine(domaine_name)
+FOREIGN KEY (domain_name) REFERENCES Domain(domain_name)
 );
 
