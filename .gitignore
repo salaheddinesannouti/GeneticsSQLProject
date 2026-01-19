@@ -1,0 +1,4 @@
+.$diagramme MCD Merise gene.drawio.bkp
+.vscode
+
+git restore --staged ".$diagramme MCD Merise gene.drawio.bkp"

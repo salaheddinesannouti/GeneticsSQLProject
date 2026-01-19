@@ -1,3 +1,7 @@
+# Rapport du projet 1 MYSQL
+
+Ce projet s’inscrit dans le cadre du module MySQL du master Computational Biology, Bioinformatics and Data Analysis. Le cahier des charges est joint dans le fichier `projet1.pdf`. L'ensomble des scripts et  fichiers utilisés et mentionnés dans le présent rapport sont disponibles sur GitHub dans la repository: https://github.com/salaheddinesannouti/GeneticsSQLProject/tree/master .
+
 # Étape de pré-traitement
 
 Afin de travailler dans des conditions proches d’un contexte réel, des données issues de bases de données biologiques de référence ont été utilisées.
@@ -175,6 +179,8 @@ IGNORE 1 ROWS;
 
 ### Requêtes SQL
 
+Pour certaines requêtes dont les résultats seraient trop volumineux pour ce document, les résultats complets ont été fournies dans un fichier séparé.
+
 #### 1. Donner les 3 protéines avec les chaines d'acide aminé les plus longues
 ```sql
 SELECT * FROM protein
@@ -202,26 +208,10 @@ ORDER BY gene_count DESC;
 | 3          | 51         |
 | 2          | 49         |
 | 12         | 47         |
-| 17         | 45         |
-| 19         | 42         |
-| X          | 41         |
-| 11         | 40         |
-| 6          | 38         |
-| 7          | 37         |
-| 8          | 34         |
-| 9          | 32         |
-| 10         | 30         |
-| 5          | 30         |
-| 16         | 28         |
-| 4          | 22         |
-| 14         | 21         |
-| 22         | 19         |
-| 15         | 19         |
-| 20         | 14         |
-| 13         | 14         |
-| 18         | 9          |
-| 21         | 5          |
 
+**. . .**
+
+La liste complète des domaines se trouve dans: `query_data\genes_by_chromosome.csv`.
 
 #### 3. Donner le nombre de protéines qui ont une chaine de longueur entre 300 et 500 aminés et dont les gènes codants sont situés sur l'un de ces chromosomes: 18, 19, 20, X ou Y
 ```sql
@@ -278,47 +268,10 @@ Résultat:
 | O00512          | 1426         | 1            |
 | O14497          | 2285         | 2            |
 | O14654          | 1257         | 1            |
-| O75376          | 2440         | 2            |
-| O75533          | 1304         | 2            |
-| P08922          | 2347         | 2            |
-| P12270          | 2363         | 2            |
-| P15941          | 1255         | 1            |
-| P21333          | 2647         | 2            |
-| P30622          | 1438         | 2            |
-| P35125          | 1406         | 2            |
-| P35658          | 2090         | 2            |
-| P54098          | 1239         | 1            |
-| Q13635          | 1447         | 1            |
-| Q14202          | 1370         | 2            |
-| Q14203          | 1278         | 2            |
-| Q14683          | 1233         | 2            |
-| Q14980          | 2115         | 1            |
-| Q15154          | 2024         | 1            |
-| Q15468          | 1287         | 1            |
-| Q49AJ0          | 1406         | 2            |
-| Q5H9F3          | 1785         | 2            |
-| Q63HN8          | 5207         | 2            |
-| Q68CP9          | 1835         | 2            |
-| Q6N021          | 2002         | 1            |
-| Q7Z407          | 3707         | 2            |
-| Q7Z7A1          | 2325         | 1            |
-| Q86UP2          | 1357         | 1            |
-| Q86UU0          | 1499         | 1            |
-| Q8NFD5          | 2319         | 2            |
-| Q8NFU7          | 2136         | 2            |
-| Q8NG31          | 2342         | 2            |
-| Q8WXI7          | 14507        | 1            |
-| Q96RK0          | 2517         | 2            |
-| Q99996          | 3907         | 1            |
-| Q9BX63          | 1249         | 2            |
-| Q9BXW9          | 1451         | 1            |
-| Q9HCM3          | 1950         | 1            |
-| Q9NYV4          | 1490         | 1            |
-| Q9UBW7          | 1377         | 2            |
-| Q9UHC6          | 1331         | 2            |
-| Q9UQB3          | 1225         | 1            |
-| Q9Y618          | 2514         | 2            |
 
+**. . .**
+
+La liste complète des domaines se trouve dans: `query_data\long_prot_low_domains.csv`.
 
 #### 6. Donner la liste des domaines présents dans au moins dix protéines différentes
 ```sql
@@ -353,6 +306,11 @@ Résultat:
 
 
 #### 7. Lister les domaines présents dans des protéines de plus de quatre chromosomes et les chromosomes sur lesquels ils sont présent
+
+`GROUP_CONCAT` est une fonction d’agrégation SQL qui concatène, en une seule chaîne, les valeurs d’une colonne issues de plusieurs lignes appartenant à un même groupe, généralement défini par GROUP BY. 
+
+Dans ce cas, on va concaténer les chromosomes qui codent pour les mêmes domaines. 
+
 ```sql
 SELECT pcd.domain_name, GROUP_CONCAT(DISTINCT g.chromosome) AS chromosomes
 FROM ProteinContainsDomain pcd
@@ -369,48 +327,15 @@ Résultat:
 | Bromodomain       | 1,14,16,19,22,3,7,9           |
 | BTB               | 11,17,19,22,3                 |
 | bZIP_1            | 1,11,12,2,7                   |
-| C1_1              | 14,16,19,3,7,X                |
-| Cadherin          | 10,11,16,4,5,8                |
-| DEAD              | 11,14,15,17,3,8,X             |
-| EGF               | 1,11,2,4,8,9                  |
-| EGF_CA            | 1,2,3,4,9                     |
-| Ets               | 1,11,12,17,2,21,3,7,X         |
-| fn3               | 1,12,18,20,3,5,6,9            |
-| Forkhead          | 11,13,14,3,6,X                |
-| HATPase_c_3       | 14,2,3,6,7                    |
-| hEGF              | 1,11,12,4,9                   |
-| Helicase_C        | 11,12,14,15,17,19,3,8,X       |
-| HLH               | 1,11,14,15,19,2,21,3,6,8,9,X |
-| HMG_box           | 10,13,17,19,2,3,4             |
-| Homeodomain       | 1,10,12,13,14,16,2,22,4,5,6,7 |
-| Hormone_recep     | 17,3,6,9,X                    |
-| I-set             | 10,12,15,18,3,4,5,6,8,9       |
-| ig                | 1,13,15,4,5,8                 |
-| Ig_3              | 10,12,18,19,3,4,5,9           |
-| PH                | 1,14,19,20,4,5,X              |
-| PHD               | 1,10,11,12,14,4,5,7,8,X       |
-| PK_Tyr_Ser-Thr    | 1,10,12,13,15,17,19,2,20,3,4,5,6,7,8,9,X |
-| Pkinase           | 1,10,12,13,14,15,16,17,19,2,22,3,5,6,7,8,9 |
-| Pkinase_C         | 1,13,14,16,19                 |
-| PWWP              | 2,4,5,8,9                     |
-| Ras               | 1,11,12,19,3,4,7              |
-| RhoGAP            | 14,19,22,3,5                  |
-| RhoGEF            | 1,11,19,22,6,8                |
-| RRM_1             | 1,10,12,16,17,21,22,3,6,7,8,X |
-| SET               | 1,11,12,3,4,5,7,8             |
-| SH2               | 1,12,15,16,17,19,20,4,5,8,9,X |
-| SH3_1             | 1,10,19,20,3,4,5,8,9,X        |
-| UCH               | 12,15,16,17,X                 |
-| WD40              | 11,16,2,3,4                   |
-| Y_phosphatase     | 1,12,20,4,6,9                 |
-| zf-C2H2           | 1,10,11,12,14,16,17,18,19,2,20,22,3,6,7,8,9 |
-| zf-C2H2_6         | 1,11,12,18,19,22,3,8          |
-| zf-C4             | 17,3,6,9,X                    |
-| Zn_ribbon_RanBP   | 1,12,16,2,22,X                |
 
+**. . .**
 
+La liste complète des domaines se trouve dans: `query_data\domain_to_chromosomes.csv`.
 
 #### 8. Identifier les gènes qui ont des domaines spécifiques (produits uniquement par ces gènes)
+
+`WITH` est une clause SQL qui permet de définir des expressions de table communes (CTE, Common Table Expressions), c’est-à-dire des sous-requêtes nommées, temporaires et réutilisables au sein d’une requête
+
 ```sql
 WITH domains_count AS(
     SELECT domain_name, count(DISTINCT accession_number) AS genes_number
@@ -438,8 +363,10 @@ Résultat:
 | DNMT3A     | ADD_DNMT3   |
 | KDSR       | adh_short   |
 | ATIC       | AICARFT_IMPCHas |
-...
-La liste complète des domaines se trouve dans: `query_data\unique_gene_domains.csv`.
+
+**. . .**
+
+**La liste complète des domaines se trouve dans: `query_data\unique_gene_domains.csv`.**
 
 
 #### 9. Trouver le chromosome pour lequel la somme des masses moléculaires des protéines codées est maximale
@@ -463,6 +390,9 @@ Résultat:
 
 
 #### 10. Vérifier si le plus long gène code pour la plus grande protéine
+
+Pour deux tables 
+A et B, CROSS JOIN génère toutes les combinaisons possibles (a,b) où a et b sont des éléments de A et B respectivement, sans condition de jointure.
 ```sql
 WITH longest_gene AS (
     SELECT gene_symbol, (chr_end_pos - chr_start_pos) AS gene_length
