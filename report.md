@@ -2,11 +2,11 @@
 
 Ce projet s’inscrit dans le cadre du module MySQL du master Computational Biology, Bioinformatics and Data Analysis. Le cahier des charges est joint dans le fichier `projet1.pdf`. L'ensomble des scripts et  fichiers utilisés et mentionnés dans le présent rapport sont disponibles sur GitHub dans la repository: https://github.com/salaheddinesannouti/GeneticsSQLProject/tree/master .
 
-# Étape de pré-traitement
+## Étape de pré-traitement
 
 Afin de travailler dans des conditions proches d’un contexte réel, des données issues de bases de données biologiques de référence ont été utilisées.
 
-## Données utilisées
+### Données utilisées
 
 Les gènes humains proviennent du jeu de données **Human genes (GRCh38.p14)**. 
 
@@ -18,7 +18,7 @@ Les protéines codées par ces gènes ont été récupérées à partir de la ba
 
 Les domaines fonctionnels des protéines ont été obtenus via **InterPro**, base de données intégrative décrivant les familles, domaines et sites fonctionnels des protéines.  
 
-## Intégration et préparation des données
+### Intégration et préparation des données
 
 Les données issues de ces différentes sources étant initialement hétérogènes et isolées, un pipeline de pré-traitement a été développé en **Python** afin de :  
 
@@ -31,7 +31,7 @@ Cette étape a permis de garantir la cohérence référentielle (gène–protéi
 
 L’ensemble du script de pré-traitement, des fichiers intermédiaires et des jeux de données finaux est versionné et accessible sur **GitHub**, garantissant la traçabilité, la reproductibilité et la vérifiabilité de l’ensemble du pipeline de construction de la base de données.  
 
-# MCD
+## MCD
 
 Afin de garantir la conformité du modèle à la réalité biologique, ces choix ont été faits :  
 
@@ -59,8 +59,8 @@ Domain(**<u>domain_name</u>**, family, domain_description)
 
 ProteinContainsDomain(**<u>#accession_number</u>**, **<u>#domain_name</u>**)
 
-## Choix des types de donnée pour chaque attribut
-### Table Gene
+### Choix des types de donnée pour chaque attribut
+#### Table Gene
 
 | Attribut       | Type choisi     | Justification                                                                                       |
 |----------------|----------------|---------------------------------------------------------------------------------------------------|
@@ -73,7 +73,7 @@ ProteinContainsDomain(**<u>#accession_number</u>**, **<u>#domain_name</u>**)
 
 ---
 
-### Table Protein
+#### Table Protein
 
 | Attribut           | Type choisi   | Justification                                                                                     |
 |-------------------|--------------|-------------------------------------------------------------------------------------------------|
@@ -85,7 +85,7 @@ ProteinContainsDomain(**<u>#accession_number</u>**, **<u>#domain_name</u>**)
 
 ---
 
-### Table Domain
+#### Table Domain
 
 | Attribut           | Type choisi   | Justification                                                                                     |
 |-------------------|--------------|-------------------------------------------------------------------------------------------------|
@@ -95,7 +95,7 @@ ProteinContainsDomain(**<u>#accession_number</u>**, **<u>#domain_name</u>**)
 
 ---
 
-### Table ProteinContainsDomain
+#### Table ProteinContainsDomain
 
 | Attribut         | Type choisi   | Justification                                                                                     |
 |-----------------|--------------|-------------------------------------------------------------------------------------------------|
@@ -105,7 +105,7 @@ ProteinContainsDomain(**<u>#accession_number</u>**, **<u>#domain_name</u>**)
 
 ## Scripts SQL
 
-### Création des tables
+#### Création des tables
 
 ```sql
 CREATE DATABASE IF NOT EXISTS CancerBioInfo;
@@ -146,7 +146,7 @@ FOREIGN KEY (accession_number) REFERENCES Protein(accession_number),
 FOREIGN KEY (domaine_name) REFERENCES Domaine(domaine_name)
 );
 ```
-### Insertion des données
+#### Insertion des données
 ```sql
 LOAD DATA INFILE 'new_data/genes.csv' 
 INTO TABLE Gene 
@@ -177,11 +177,11 @@ LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 ```
 
-### Requêtes SQL
+#### Requêtes SQL
 
 Pour certaines requêtes dont les résultats seraient trop volumineux pour ce document, les résultats complets ont été fournies dans un fichier séparé.
 
-#### 1. Donner les 3 protéines avec les chaines d'acide aminé les plus longues
+##### 1. Donner les 3 protéines avec les chaines d'acide aminé les plus longues
 ```sql
 SELECT * FROM protein
 ORDER BY chain_length DESC
@@ -195,7 +195,7 @@ Résultat:
 | Q99102          | MUC4       | 5412        | 542307         | FUNCTION: Membrane-bound mucin, a family of highly glycosylated proteins that constitute the major component of the mucus, the slimy and viscous secretion covering epithelial surfaces (PubMed:10880978). These glycoproteins play important roles in the protection and lubrication of epithelial surfaces. |
 
 
-#### 2. Donner le nombre de gènes par chromosome, en triant par nombre de gènes décroissant
+##### 2. Donner le nombre de gènes par chromosome, en triant par nombre de gènes décroissant
 ```sql
 SELECT chromosome, count(*) AS gene_count
 FROM Gene 
@@ -213,7 +213,7 @@ ORDER BY gene_count DESC;
 
 La liste complète des domaines se trouve dans: `query_data\genes_by_chromosome.csv`.
 
-#### 3. Donner le nombre de protéines qui ont une chaine de longueur entre 300 et 500 aminés et dont les gènes codants sont situés sur l'un de ces chromosomes: 18, 19, 20, X ou Y
+##### 3. Donner le nombre de protéines qui ont une chaine de longueur entre 300 et 500 aminés et dont les gènes codants sont situés sur l'un de ces chromosomes: 18, 19, 20, X ou Y
 ```sql
 SELECT count(*) AS protein_number
 FROM Protein 
@@ -226,7 +226,7 @@ Résultat:
 | 30               |
 
 
-#### 4. Donner les 10 protéines avec le plus de domaines associés
+##### 4. Donner les 10 protéines avec le plus de domaines associés
 ```sql
 SELECT p.accession_number, count(*) AS domain_count
 FROM ProteinContainsDomain pcd
@@ -253,7 +253,7 @@ Résultat:
 | P24928          | 8     |
 
 
-#### 5. Identifier les protéines anormalement longues mais qui ont moins de deux domaines
+##### 5. Identifier les protéines anormalement longues mais qui ont moins de deux domaines
 ```sql
 SELECT p.accession_number, p.chain_length, COUNT(pcd.domain_name) AS domain_count
 FROM Protein p
@@ -273,7 +273,7 @@ Résultat:
 
 La liste complète des domaines se trouve dans: `query_data\long_prot_low_domains.csv`.
 
-#### 6. Donner la liste des domaines présents dans au moins dix protéines différentes
+##### 6. Donner la liste des domaines présents dans au moins dix protéines différentes
 ```sql
 SELECT Domain.domain_name
 FROM Domain 
@@ -305,7 +305,7 @@ Résultat:
 | zf-C2H2             |
 
 
-#### 7. Lister les domaines présents dans des protéines de plus de quatre chromosomes et les chromosomes sur lesquels ils sont présent
+##### 7. Lister les domaines présents dans des protéines de plus de quatre chromosomes et les chromosomes sur lesquels ils sont présent
 
 `GROUP_CONCAT` est une fonction d’agrégation SQL qui concatène, en une seule chaîne, les valeurs d’une colonne issues de plusieurs lignes appartenant à un même groupe, généralement défini par GROUP BY. 
 
@@ -332,7 +332,7 @@ Résultat:
 
 La liste complète des domaines se trouve dans: `query_data\domain_to_chromosomes.csv`.
 
-#### 8. Identifier les gènes qui ont des domaines spécifiques (produits uniquement par ces gènes)
+##### 8. Identifier les gènes qui ont des domaines spécifiques (produits uniquement par ces gènes)
 
 `WITH` est une clause SQL qui permet de définir des expressions de table communes (CTE, Common Table Expressions), c’est-à-dire des sous-requêtes nommées, temporaires et réutilisables au sein d’une requête
 
@@ -369,7 +369,7 @@ Résultat:
 **La liste complète des domaines se trouve dans: `query_data\unique_gene_domains.csv`.**
 
 
-#### 9. Trouver le chromosome pour lequel la somme des masses moléculaires des protéines codées est maximale
+##### 9. Trouver le chromosome pour lequel la somme des masses moléculaires des protéines codées est maximale
 ```sql
 SELECT chromosome, total_mass
 FROM (
@@ -389,7 +389,7 @@ Résultat:
 | 1          | 6346457    |
 
 
-#### 10. Vérifier si le plus long gène code pour la plus grande protéine
+##### 10. Vérifier si le plus long gène code pour la plus grande protéine
 
 Pour deux tables 
 A et B, CROSS JOIN génère toutes les combinaisons possibles (a,b) où a et b sont des éléments de A et B respectivement, sans condition de jointure.
