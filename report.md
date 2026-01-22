@@ -226,31 +226,31 @@ Résultat:
 | 30               |
 
 
-##### 4. Donner les 10 protéines avec le plus de domaines associés
+##### 4. Donner les 10 gènes avec le plus de domaines associés
 ```sql
-SELECT p.accession_number, count(*) AS domain_count
+SELECT Gene.gene_symbol, count(*) AS domain_count
 FROM ProteinContainsDomain pcd
-JOIN Protein p 
-ON pcd.accession_number=p.accession_number
-JOIN Gene 
-ON Gene.gene_symbol =  p.gene_symbol
-GROUP BY p.accession_number
+JOIN Protein p
+ON pcd.accession_number = p.accession_number
+JOIN Gene
+ON Gene.gene_symbol = p.gene_symbol
+GROUP BY Gene.gene_symbol
 ORDER BY domain_count DESC
 LIMIT 10;
 ```
 Résultat:
-| accession_number | count |
-|-----------------|-------|
-| P25054          | 15    |
-| O96028          | 9     |
-| P19174          | 8     |
-| P54132          | 8     |
-| P35968          | 8     |
-| Q09472          | 8     |
-| Q14839          | 8     |
-| P46531          | 8     |
-| Q04721          | 8     |
-| P24928          | 8     |
+| gene_symbol    | domain_count |
+|---------|--------|
+| APC     | 15     |
+| NSD2   | 9      |
+| NOTCH2 | 8      |
+| NCOA2  | 8      |
+| BLM     | 8      |
+| KDR     | 8      |
+| CREBBP | 8      |
+| EP300  | 8      |
+| CHD4   | 8      |
+| DICER1 | 8      |
 
 
 ##### 5. Identifier les protéines anormalement longues mais qui ont moins de deux domaines

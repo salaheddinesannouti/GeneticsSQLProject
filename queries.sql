@@ -19,16 +19,19 @@ FROM Protein
 JOIN Gene ON Gene.gene_symbol=Protein.gene_symbol 
 WHERE chain_length BETWEEN 300 AND 500 AND chromosome IN ('18', '19','20','X','Y');
 
-# 4. Donner les 10 protéines avec le plus de domaines associés 
-SELECT p.accession_number, count(*) AS domain_count
+# 4. Donner les 10 gènes avec le plus de domaines associés 
+SELECT Gene.gene_symbol, count(*) AS domain_count
 FROM ProteinContainsDomain pcd
-JOIN Protein p 
-ON pcd.accession_number=p.accession_number
-JOIN Gene 
-ON Gene.gene_symbol =  p.gene_symbol
-GROUP BY p.accession_number
+JOIN Protein p
+ON pcd.accession_number = p.accession_number
+JOIN Gene
+ON Gene.gene_symbol = p.gene_symbol
+GROUP BY Gene.gene_symbol
 ORDER BY domain_count DESC
 LIMIT 10;
+
+
+
 
 # 5. Identifier les protéines anormalement longues 
 # mais qui ont moins de deux domaines
@@ -108,3 +111,5 @@ SELECT
     END AS result
 FROM longest_gene lg
 CROSS JOIN longest_protein lp;
+
+SELECT count(*) FROM proteincontainsdomain;
